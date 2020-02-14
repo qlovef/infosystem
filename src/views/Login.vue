@@ -8,8 +8,8 @@
                 class="register-icon"
                 :class="{
                     'register-icon-active': status === 'register'
-                }"
-                @click="toggleLogin">
+                }">
+                <!-- @click="toggleLogin"> -->
                 <img src="@/assets/images/public/register.png" alt="注册按钮">
             </div>
             <div class="username">
@@ -20,16 +20,24 @@
             </div>
             <div class="password">
                 <el-input
-                    v-model="pwd"
+                    v-model="password"
                     type="password"
                     placeholder="请输入密码">
                 </el-input>
             </div>
             <div class="login-btn">
-                btn
+                <el-button
+                    type="primary"
+                    @click="login">
+                    登录
+                </el-button>
             </div>
             <div class="reset-pwd">
-                forget password
+                <a
+                    href="#"
+                    disabled>
+                   忘记密码?
+                </a>
             </div>
 
             <!-- 注册 -->
@@ -52,7 +60,7 @@
                 </div>
                 <div class="password">
                     <el-input
-                        v-model="pwd"
+                        v-model="password"
                         type="password"
                         placeholder="请输入密码">
                     </el-input>
@@ -92,6 +100,12 @@ export default class Login extends Vue {
     /** @desc 跳转到注册 */
     toggleLogin () {
         this.status = this.status === 'register' ? 'login' : 'register'
+    }
+
+    // 登录
+    login () {
+        //
+        sessionStorage.setItem('INFOSYSTEM_USER', 'dxq')
     }
 }
 </script>
@@ -173,6 +187,23 @@ export default class Login extends Vue {
 
             .el-input {
                 width: 80%;
+            }
+
+            .login-btn {
+                .el-button {
+                    width: 80%;
+                }
+            }
+
+            .reset-pwd {
+                a {
+                    text-decoration: none;
+                    color: #8e9aa0;
+
+                    &:hover {
+                        color: #393f42;
+                    }
+                }
             }
 
             .register-dialog {
