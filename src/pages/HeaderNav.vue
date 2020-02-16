@@ -19,25 +19,45 @@
         </el-col>
         <el-col :span="2">
           <div class="grid-content">
-            <button class="button-list">服务项目<i class="el-icon-caret-bottom"></i></button>
+            <button class="button-list" @click="buttonClick">服务项目<i class="el-icon-caret-bottom"></i></button>
             <ul class="list-nav" v-if="listSelect">
-              <li v-for="item of list" :key="item">{{item}}</li>
+              <li v-for="item of list1" :key="item">{{item}}</li>
             </ul>
           </div>
         </el-col>
-        <el-col :span="4">
+        <el-col :span="3">
           <div class="grid-content">
-            <el-input v-model="input" placeholder="请输入内容"></el-input>
+            <el-input
+                size="mini"
+                v-model="input">
+            </el-input>
           </div>
         </el-col>
         <el-col :span="1">
           <div class="grid-content">
-            <el-button type="primary" icon="el-icon-search">搜索</el-button>
+            <button class="button-search">搜索</button>
           </div>
         </el-col>
         <el-col :span="8"><div class="grid-content"></div></el-col>
-        <el-col :span="1"><div class="grid-content">123</div></el-col>
-        <el-col :span="1"><div class="grid-content">123</div></el-col>
+        <el-col :span="2">
+            <div class="grid-content">
+                <form>
+                    <select class="language-select" name="language">
+                        <option value="Simplified">简体中文</option>
+                        <option value="Simplified">繁体中文</option>
+                        <option value="English">English</option>
+                    </select>
+                </form>
+            </div>
+        </el-col>
+        <el-col :span="2">
+            <div class="grid-content">
+                <button class="button-list" @click="menberClick">会员中心<i class="el-icon-caret-bottom"></i></button>
+                <ul class="menber-nav" v-if="member">
+                    <li v-for="item of list2" :key="item">{{item}}</li>
+                </ul>
+            </div>
+        </el-col>
       </el-row>
     </div>
     <div class="header-carousel">
@@ -56,21 +76,30 @@ import { Vue, Component } from 'vue-property-decorator'
 @Component
 export default class HelloWorld extends Vue {
   carouselImg: any = [{
-    id: 1,
-    url: require('../assets/images/public/slide1.jpg')
+      id: 1,
+      url: require('../assets/images/public/slide1.jpg')
   }, {
-    id: 2,
-    url: require('../assets/images/public/slide2.jpg')
+      id: 2,
+      url: require('../assets/images/public/slide2.jpg')
   }, {
-    id: 3,
-    url: require('../assets/images/public/slide3.jpg')
+      id: 3,
+      url: require('../assets/images/public/slide3.jpg')
   }]
 
-  list: any = ['平面设计', '网页设计', '服务器托管']
+  list1: Array<string> = ['平面设计', '网页设计', '服务器托管', '动效合成', '影视后期']
+  list2: Array<string> = ['个人资料', '结算中心', '所有文章', '注销']
 
-  listSelect = true
+  listSelect = false
+  member = false
 
-  input: any = 'Srarch'
+  input: String = 'Srarch'
+
+  buttonClick () {
+      this.listSelect = !this.listSelect
+  }
+  menberClick () {
+      this.member = !this.member
+  }
 }
 </script>
 
@@ -91,22 +120,54 @@ export default class HelloWorld extends Vue {
   .button-nav {
     color: #ffffff;
     font-size: 15px;
-    margin: 0;
     padding: 0;
   }
   .button-list {
     font-size: 15px;
     height: 30px;
+    margin: 0;
     padding: 0;
     color: #ffffff;
     background-color: #000000;
-    border: 1px solid #000000;
+    border: none;
   }
   .list-nav {
     position: absolute;
     top: 35px;
     left: 0;
     width: 120px;
+    margin: 0%;
+    padding: 0 15px;
+    text-align: left;
+    z-index: 1000;
+    color: #000000;
+    background-color: #ffffff;
+    list-style-type: none;
+  }
+  .button-search {
+    width: 45px;
+    height: 28px;
+    line-height: 28px;
+    margin-left: 5px;
+    padding: 0;
+    font-size: 15px;
+    text-align: center;
+    color: #000000;
+    background-color: #ffffff;
+    border-radius: 3px;
+    border: none;
+  }
+  .language-select {
+      height: 28px;
+      line-height: 28px;
+      text-align: center;
+      border-radius: 3px;
+  }
+  .menber-nav {
+    position: absolute;
+    top: 35px;
+    right: 0;
+    width: 100px;
     margin: 0%;
     padding: 0 15px;
     text-align: left;
