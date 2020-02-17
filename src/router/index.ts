@@ -2,7 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import Login from '../views/Login.vue'
-import pages from '../pages/HeaderNav.vue'
+import pages from '../pages/index.vue'
 
 Vue.use(VueRouter)
 
