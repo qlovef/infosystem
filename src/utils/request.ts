@@ -45,14 +45,14 @@ Request.interceptors.request.use((config: AxiosRequestConfig) => {
 Request.interceptors.response.use((response: AxiosResponse) => {
     if (response.config.url) {
         const url = response.config.url
-        const code: number = response.data.Code
+        const code: number = response.data.code
         reqQueue.splice(reqQueue.indexOf(url), 1)
         switch (code) {
         case -1:
             location.hash = '#/login'
             throw new Error('未登录')
         case 0:
-            throw new Error(response.data.Msg)
+            throw new Error(response.data.msg)
         }
     }
     return response
@@ -61,7 +61,7 @@ Request.interceptors.response.use((response: AxiosResponse) => {
 // const _this = new Vue()
 
 // 重写get
-export const Get = (url: string, params: object = {}) => {
+export const Get = (url: string, params?: object) => {
     return new Promise((resolve, reject) => {
         Request.get(url, params).then((result: AxiosResponse<object>) => {
             resolve(result.data)

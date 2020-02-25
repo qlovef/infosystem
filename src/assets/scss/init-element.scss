@@ -1,0 +1,13 @@
+.el-form {
+    .el-input {
+        width: 220px;
+    }
+    .no-validator {
+        margin-bottom: 6px;
+    }
+}
+.el-input {
+    .el-input__inner {
+        border-radius: 0;
+    }
+}

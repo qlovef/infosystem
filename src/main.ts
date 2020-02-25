@@ -11,18 +11,24 @@ Vue.config.productionTip = false
 Vue.use(ElementUI)
 
 router.beforeEach((to, from, next) => {
-    if (to.path === '/login') {
-        sessionStorage.removeItem('INFOSYSTEM_USER')
-        next()
-        return
-    }
-    if (sessionStorage) {
-        const user: string | null = sessionStorage.getItem('INFOSYSTEM_USER')
-        if (!user) {
-            next({ path: '/login' })
-        } else {
-            next()
-        }
+    // if (to.path === '/login') {
+    //     sessionStorage.removeItem('INFOSYSTEM_USER')
+    //     next()
+    //     return
+    // }
+    // if (sessionStorage) {
+    //     const user: string | null = sessionStorage.getItem('INFOSYSTEM_USER')
+    //     if (!user) {
+    //         next({ path: '/login' })
+    //     } else {
+    //         next()
+    //     }
+    // } else {
+    //     next()
+    // }
+
+    if (to.path === '/') {
+        next({ name: 'menuManage' })
     } else {
         next()
     }

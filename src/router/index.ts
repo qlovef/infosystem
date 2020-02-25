@@ -12,9 +12,9 @@ const routes = [
         component: Home,
         children: [
             {
-                path: '/lesson',
-                name: 'lesson',
-                component: () => import(/* webpackChunkName: "lesson" */ '@/views/Lesson/Lesson.vue')
+                path: '/system/menu-manage',
+                name: 'menuManage',
+                component: () => import(/* webpackChunkName: "menuManage" */ '@/views/system/MenuManage.vue')
             }
         ]
     },
