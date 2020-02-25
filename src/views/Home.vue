@@ -1,5 +1,5 @@
 <template>
-    <div id="home">
+    <div id="page-home">
         <router-view></router-view>
         <!-- <div class="pie-chart">
             <div
@@ -59,20 +59,23 @@ export default class Home extends Vue {
 </script>
 
 <style lang="scss">
-.box-clip {
-    position: absolute;
-    clip: rect(0px,100px,100px,50px);
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    margin: 0px;
-}
-.cover-clip, .fill-clip {
-    position: absolute;
-    clip: rect(0px, 50px, 100px, 0px);
-    border-radius: 50%;
-    width: 100px;
-    height: 100px;
-    background: gray;
+// .box-clip {
+//     position: absolute;
+//     clip: rect(0px,100px,100px,50px);
+//     width: 100px;
+//     height: 100px;
+//     border-radius: 50%;
+//     margin: 0px;
+// }
+// .cover-clip, .fill-clip {
+//     position: absolute;
+//     clip: rect(0px, 50px, 100px, 0px);
+//     border-radius: 50%;
+//     width: 100px;
+//     height: 100px;
+//     background: gray;
+// }
+#page-home {
+    padding: 10px 10px;
 }
 </style>

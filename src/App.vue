@@ -13,15 +13,13 @@ export default class App extends Vue {}
 
 <style lang="scss">
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  width: 100%;
-  height: 100%;
-  background: rgb(229, 234, 236);
-//   margin-top: 60px;
+    font-family: 'Avenir', Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-align: center;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.05);
 }
 
 html, body {
@@ -30,4 +28,6 @@ html, body {
     width: 100%;
     height: 100%;
 }
+@import '@/assets/scss/init.scss';
+@import '@/assets/scss/init-element.scss';
 </style>

@@ -111,7 +111,6 @@
                     class="no-validator">
                     <el-input
                         v-model.trim.number="menu.RouteOrder"
-                        type="number"
                         size="small" />
                 </el-form-item>
             </el-form>
