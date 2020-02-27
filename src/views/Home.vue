@@ -1,81 +1,87 @@
 <template>
     <div id="page-home">
-        <router-view></router-view>
-        <!-- <div class="pie-chart">
+        <div class="row menu-row">
             <div
-                v-for="item in dataList"
-                :key="item.id"
-                class="box-clip"
-                :style="{
-                    'clip': item.deg > 180 ? 'rect(auto,auto,auto,auto)' : 'rect(0px,100px,100px,50px)',
-                    'transform': `rotate(${item.usedDeg}deg)`
-                }">
-                <div
-                    class="cover-clip"
-                    :style="{
-                        'background': item.color,
-                        'transform': `rotate(${item.deg > 180 ? 180 : item.deg}deg)`
-                    }">
-                </div>
-                <div
-                    v-if="item.deg > 180"
-                    class="fill-clip"
-                    :style="{
-                        'background': item.color,
-                        'transform': `rotate(${item.deg}deg)`
-                    }">
-                </div>
+                v-for="menu of menuList"
+                class="menu"
+                :key="menu.Id"
+                @click="goPage(menu.RouteUrl)">
+                {{ menu.RouteName }}
             </div>
-        </div> -->
+        </div>
+        <router-view></router-view>
     </div>
 </template>
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator'
-import { RequestPostEditMenu } from '../request/menuManage'
+import { RequestGetMenuList } from '../request/menuManage'
 import axios from 'axios'
+import { Menu } from '@/interface/menuManage'
 
 @Component({})
 
 export default class Home extends Vue {
-    total = 406
-    dataList = [{
-        id: 1,
-        deg: 30,
-        color: '#10AEFF',
-        usedDeg: 0
-    }, {
-        id: 2,
-        deg: 230,
-        color: '#04BE02',
-        usedDeg: 30
-    }, {
-        id: 3,
-        deg: 60,
-        color: '#888',
-        usedDeg: 260
-    }]
+    // 菜单列表
+    menuList: Menu[] = []
+
+    created () {
+        this.fetchMenuList()
+    }
+
+    // 获取菜单列表
+    async fetchMenuList () {
+        const result: any = await RequestGetMenuList({
+            Page: 1,
+            PageSize: 100
+        })
+        if (result.Code === 1) {
+            this.menuList = result.Data.List
+        }
+    }
+
+    /** @desc 跳转页面 @param {string} url 要跳转的url */
+    goPage (url: string) {
+        if (url === this.$route.path) {
+            return
+        }
+        this.$router.push({
+            path: url
+        })
+    }
 }
 </script>
 
 <style lang="scss">
-// .box-clip {
-//     position: absolute;
-//     clip: rect(0px,100px,100px,50px);
-//     width: 100px;
-//     height: 100px;
-//     border-radius: 50%;
-//     margin: 0px;
-// }
-// .cover-clip, .fill-clip {
-//     position: absolute;
-//     clip: rect(0px, 50px, 100px, 0px);
-//     border-radius: 50%;
-//     width: 100px;
-//     height: 100px;
-//     background: gray;
-// }
 #page-home {
     padding: 10px 10px;
+
+    .menu-row {
+        display: flex;
+        background: rgb(129, 194, 214);
+        border-radius: 5px;
+
+        .menu {
+            min-width: 60px;
+            height: 30px;
+            line-height: 30px;
+            border-right: 1px solid rgb(185, 202, 218);
+            padding: 0 10px;
+            display: flex;
+            justify-content: center;
+            flex-wrap: nowrap;
+            user-select: none;
+            cursor: pointer;
+
+            &:hover {
+                background: rgba(0, 0, 0, 0.1);
+            }
+        }
+
+        a {
+            color: black;
+            text-decoration: none;
+        }
+    }
 }
 </style>

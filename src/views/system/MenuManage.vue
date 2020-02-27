@@ -312,8 +312,8 @@ export default class MenuManage extends Vue {
     }
     // 隐藏菜单弹窗
     hideMenuDialog () {
-        this.isShowMenuDialog = false
         this.resetMenuDialog()
+        this.isShowMenuDialog = false
     }
     // 重置菜单弹窗
     resetMenuDialog () {
@@ -340,13 +340,13 @@ export default class MenuManage extends Vue {
             const result: any = await RequestPostEditMenu(menu)
             if (result.Code === 1) {
                 this.hideMenuDialog()
-                this.fetchMenuList()
+                location.reload()
             }
         } else {
             const result: any = await RequestPostAddMenu(menu)
             if (result.Code === 1) {
                 this.hideMenuDialog()
-                this.fetchMenuList()
+                location.reload()
             }
         }
     }
@@ -360,7 +360,7 @@ export default class MenuManage extends Vue {
         })
         const result: any = await RequestPostDeleteMenu(ids)
         if (result.Code === 1) {
-            this.fetchMenuList()
+            location.reload()
         }
     }
 }

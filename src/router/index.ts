@@ -15,6 +15,11 @@ const routes = [
                 path: '/system/menu-manage',
                 name: 'menuManage',
                 component: () => import(/* webpackChunkName: "menuManage" */ '@/views/system/MenuManage.vue')
+            },
+            {
+                path: '/vacation/approved-record',
+                name: 'approvedRecord',
+                component: () => import(/* webpackChunkName: "approvedRecord" */ '@/views/vacation/ApprovedRecordList.vue')
             }
         ]
     },
