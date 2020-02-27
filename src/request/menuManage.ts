@@ -22,5 +22,5 @@ export const RequestPostEditMenu = (menu: Menu) => {
 
 // 删除菜单
 export const RequestPostDeleteMenu = (ids: number[]) => {
-    return Post('', ids)
+    return Post('/menu/delete', { Id: ids })
 }

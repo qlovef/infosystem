@@ -20,6 +20,12 @@
                         @click="onEditMenu">
                         编辑
                     </el-button>
+                    <el-button
+                        size="small"
+                        :disabled="selection.length < 1"
+                        @click="onDeleteMenu">
+                        删除
+                    </el-button>
                 </div>
             </div>
             <div class="row">
@@ -62,9 +68,9 @@
             <div class="row right">
                 <el-pagination
                     layout="prev, pager, next"
-                    :page-size="menuPagination.pageSize"
-                    :page-count="menuPagination.pageCount"
-                    :total="menuPagination.totalCount"
+                    :page-size="menuPagination.PageSize"
+                    :page-count="menuPagination.PageCount"
+                    :total="menuPagination.TotalCount"
                     @current-change="onMenuPageChange">
                 </el-pagination>
             </div>
@@ -155,10 +161,10 @@ export default class MenuManage extends Vue {
     selection: Menu[] = []
     // 菜单页码
     menuPagination: Pagination = {
-        page: 1,
-        pageSize: 20,
-        pageCount: 0,
-        totalCount: 0
+        Page: 1,
+        PageSize: 20,
+        PageCount: 0,
+        TotalCount: 0
     }
     // 搜索信息
     searchInfo = ''
@@ -204,6 +210,14 @@ export default class MenuManage extends Vue {
         this.setMenuForm(this.selection[0])
         this.showMenuDialog()
     }
+    // 点击删除按钮时触发
+    onDeleteMenu () {
+        this.$confirm('确认删除选中菜单吗？', {
+            type: 'warning'
+        }).then(() => {
+            this.deleteMenu(this.selection)
+        }).catch(() => {})
+    }
     // 点击菜单表格的行触发
     onMenuRowClick (row: Menu) {
         const menuTable = this.$refs.menuTable as ElTable
@@ -223,7 +237,7 @@ export default class MenuManage extends Vue {
     }
     // 菜单表格页码改变时触发
     onMenuPageChange (page: number) {
-        this.menuPagination.page = page
+        this.menuPagination.Page = page
         this.fetchMenuList()
     }
 
@@ -269,11 +283,18 @@ export default class MenuManage extends Vue {
     async fetchMenuList () {
         this.menuList = []
         const result: any = await RequestGetMenuList({
-            Page: this.menuPagination.page,
-            PageSize: this.menuPagination.pageSize,
+            Page: this.menuPagination.Page,
+            PageSize: this.menuPagination.PageSize,
             Name: this.searchInfo
         })
-        this.menuList = result.Data
+        const data = result.Data
+        this.menuPagination = {
+            Page: data.Page,
+            PageSize: data.PageSize,
+            PageCount: data.PageCount,
+            TotalCount: data.TotalCount
+        }
+        this.menuList = data.List
     }
     /** @desc 设置菜单弹窗表单 @param {Menu} menu 菜单 */
     setMenuForm (menu?: Menu) {
@@ -337,7 +358,10 @@ export default class MenuManage extends Vue {
                 ids.push(sel.Id)
             }
         })
-        const result = await RequestPostDeleteMenu(ids)
+        const result: any = await RequestPostDeleteMenu(ids)
+        if (result.Code === 1) {
+            this.fetchMenuList()
+        }
     }
 }
 </script>
