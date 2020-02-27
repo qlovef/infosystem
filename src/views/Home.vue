@@ -4,6 +4,9 @@
             <div
                 v-for="menu of menuList"
                 class="menu"
+                :style="{
+                    'display': menu.IsShow ? '' : 'none'
+                }"
                 :key="menu.Id"
                 @click="goPage(menu.RouteUrl)">
                 {{ menu.RouteName }}
@@ -58,6 +61,7 @@ export default class Home extends Vue {
 
     .menu-row {
         display: flex;
+        flex-wrap: wrap;
         background: rgb(129, 194, 214);
         border-radius: 5px;
 
