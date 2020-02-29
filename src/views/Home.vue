@@ -18,7 +18,7 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator'
-import { RequestGetMenuList } from '../request/menuManage'
+import { RequestGetMenuList } from '@/request/menuManage'
 import axios from 'axios'
 import { Menu } from '@/interface/menuManage'
 

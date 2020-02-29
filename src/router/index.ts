@@ -20,6 +20,11 @@ const routes = [
                 path: '/vacation/approved-record',
                 name: 'approvedRecord',
                 component: () => import(/* webpackChunkName: "approvedRecord" */ '@/views/vacation/ApprovedRecordList.vue')
+            },
+            {
+                path: '/approval/not-approved',
+                name: 'notApproved',
+                component: () => import(/* webpackChunkName: "notApproved" */ '@/views/approval/NotApprovedList.vue')
             }
         ]
     },
