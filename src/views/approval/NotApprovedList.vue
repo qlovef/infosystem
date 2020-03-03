@@ -101,20 +101,26 @@
         </div>
 
         <el-dialog
+            width="40%"
             title="新增"
+            :close-on-click-modal="false"
             :visible.sync="addLeave">
-            <el-form>
+            <el-form
+                label-width="100px"
+                :model="notApproved">
                 <el-form-item label="姓名">
-                    <el-input autocomplete="off"></el-input>
+                    <el-input size="mini" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="工号">
-                    <el-input autocomplete="off"></el-input>
+                    <el-input size="mini" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="类型">
-                    <el-select placeholder="">
+                <el-form-item label="请假类型">
+                    <el-select size="small" placeholder="类型" value="">
                         <el-option
+                            size="small"
                             v-for="(item, index) of vacationType"
-                            :key="index">
+                            :key="index"
+                            value="">
                             {{item}}
                         </el-option>
                     </el-select>
@@ -122,17 +128,19 @@
                 <el-form-item label="请假时间">
                     <div class="block">
                         <el-date-picker
+                            class="date-select"
+                            size="small"
                             v-model="dateValue"
-                            type="datetimeerange"
-                            align="right"
-                            star-placeholder="开始日期"
+                            type="datetimerange"
+                            align="center"
+                            start-placeholder="开始日期"
                             end-placeholder="结束日期"
                             :default-time="['00:00:00', '23:59:59']">
                         </el-date-picker>
                     </div>
                 </el-form-item>
                 <el-form-item label="请假原因">
-                    <el-input autocomplete="off"></el-input>
+                    <el-input type="textarea" autocomplete="off"></el-input>
                 </el-form-item>
              </el-form>
                 <div slot="footer" class="dialog-footer">
@@ -153,9 +161,6 @@ import {
 
 @Component({})
 export default class NotApprovedList extends Vue {
-    addLeave = false
-    dateValue = ''
-
     approvedRecordList: ApprovedRecord[] = []
 
     pagination: Pagination = {
@@ -165,8 +170,20 @@ export default class NotApprovedList extends Vue {
         TotalCount: 0
     }
 
+    // 新增列表时间
+    dateValue = ''
     // 搜索信息
     searchInfo = ''
+
+    notApproved: ApprovedRecord = {
+        Id: null,
+        Name: '',
+        JobNumber: '',
+        Type: '',
+        StartTime: '',
+        EndTime: '',
+        IsPermit: 0
+    }
     // 请假类型
     vacationType = [
         '事假',
@@ -176,6 +193,9 @@ export default class NotApprovedList extends Vue {
         '年假',
         '调休假'
     ]
+
+    // 是否显示对话窗口
+    addLeave = false
 
     created () {
         this.fetchNotApprovedRecordList()
@@ -200,8 +220,7 @@ export default class NotApprovedList extends Vue {
 </script>
 
 <style lang="scss" scoped>
-.table-style {
-    width: 100%;
-    text-align: center;
+.date-select {
+    width: 350px;
 }
 </style>

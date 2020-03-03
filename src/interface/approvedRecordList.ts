@@ -6,5 +6,5 @@ export interface ApprovedRecord {
     Type: number;
     StartTime: string;
     EndTime: string;
-    IsPermit: number;
+    IsPermit?: number;
 }
