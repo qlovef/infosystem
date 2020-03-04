@@ -1,5 +1,6 @@
 import { GetParams } from '@/interface/public'
-import { Get } from '@/utils/request'
+import { Get, Post } from '@/utils/request'
+import { ApprovedRecord } from '@/interface/approvedRecordList'
 
 // 获取已审批请假申请记录列表
 export const RequestGetApprovedRecordList = (params: GetParams) => {
@@ -15,4 +16,9 @@ export const RequestGetNotApprovedRecordList = (params: GetParams) => {
     query += `&PageSize=${params.PageSize || 20}`
     query += `&Name=${params.Name || ''}`
     return Get(`/vacation/application/list${query}`)
+}
+
+// 新增菜单
+export const RequestPostAddNotApproved = (notApproved: ApprovedRecord) => {
+    return Post('/vacation/application/add', notApproved)
 }

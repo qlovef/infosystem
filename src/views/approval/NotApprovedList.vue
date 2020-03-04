@@ -103,49 +103,58 @@
         <el-dialog
             width="40%"
             title="新增"
+            :show-close="false"
             :close-on-click-modal="false"
             :visible.sync="addLeave">
             <el-form
                 label-width="100px"
                 :model="notApproved">
                 <el-form-item label="姓名">
-                    <el-input size="mini" autocomplete="off"></el-input>
+                    <el-input v-model.trim="notApproved.Name" size="mini" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="工号">
-                    <el-input size="mini" autocomplete="off"></el-input>
+                    <el-input v-model.trim.number="notApproved.JobNumber" size="mini" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="请假类型">
-                    <el-select size="small" placeholder="类型" value="">
+                    <el-select v-model.trim="notApproved.Type" size="small" placeholder="类型">
                         <el-option
                             size="small"
                             v-for="(item, index) of vacationType"
                             :key="index"
-                            value="">
-                            {{item}}
+                            :label="item"
+                            :value="index">
                         </el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="请假时间">
-                    <div class="block">
                         <el-date-picker
                             class="date-select"
                             size="small"
                             v-model="dateValue"
                             type="datetimerange"
                             align="center"
+                            value-format="yyyy-MM-dd HH-mm-ss"
                             start-placeholder="开始日期"
                             end-placeholder="结束日期"
                             :default-time="['00:00:00', '23:59:59']">
                         </el-date-picker>
-                    </div>
                 </el-form-item>
                 <el-form-item label="请假原因">
                     <el-input type="textarea" autocomplete="off"></el-input>
                 </el-form-item>
              </el-form>
                 <div slot="footer" class="dialog-footer">
-                    <el-button @click="addLeave = false">取 消</el-button>
-                    <el-button type="primary" @click="addLeave = false">确 定</el-button>
+                    <el-button
+                        size="small"
+                        type="primary"
+                        @click="notApprovedSubmit">
+                        确 定
+                    </el-button>
+                    <el-button
+                        size="small"
+                        @click="addLeave = false">
+                        取 消
+                    </el-button>
                 </div>
         </el-dialog>
     </section>
@@ -156,7 +165,8 @@ import { Vue, Component } from 'vue-property-decorator'
 import { Pagination } from '@/interface/public'
 import { ApprovedRecord } from '@/interface/approvedRecordList'
 import {
-    RequestGetNotApprovedRecordList
+    RequestGetNotApprovedRecordList,
+    RequestPostAddNotApproved
 } from '@/request/approvedRecordList'
 
 @Component({})
@@ -178,8 +188,8 @@ export default class NotApprovedList extends Vue {
     notApproved: ApprovedRecord = {
         Id: null,
         Name: '',
-        JobNumber: '',
-        Type: '',
+        JobNumber: null,
+        Type: null,
         StartTime: '',
         EndTime: '',
         IsPermit: 0
@@ -206,6 +216,14 @@ export default class NotApprovedList extends Vue {
         this.fetchNotApprovedRecordList()
     }
 
+    // 新增确定时触发
+    notApprovedSubmit () {
+        this.notApproved.StartTime = this.dateValue[0]
+        this.notApproved.EndTime = this.dateValue[1]
+        this.addLeave = false
+        this.subNotApprovedform()
+    }
+
     async fetchNotApprovedRecordList () {
         const result: any = await RequestGetNotApprovedRecordList({
             Page: this.pagination.Page,
@@ -214,6 +232,14 @@ export default class NotApprovedList extends Vue {
         })
         if (result.Code === 1) {
             this.approvedRecordList = result.Data.List
+        }
+    }
+
+    async subNotApprovedform () {
+        const { notApproved } = this
+        const result: any = await RequestPostAddNotApproved(notApproved)
+        if (result.Code === 1) {
+            this.fetchNotApprovedRecordList()
         }
     }
 }
