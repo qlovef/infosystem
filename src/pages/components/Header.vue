@@ -1,5 +1,5 @@
 <template>
-  <div class="header">
+  <div class="header" @click="headerClick">
     <div class="header-nav">
       <el-row type="flex" class="row-bg">
         <el-col :span="2"><div class="grid-content">UISDC前端</div></el-col>
@@ -19,7 +19,7 @@
         </el-col>
         <el-col :span="2">
           <div class="grid-content">
-            <button class="button-list" @click="buttonClick">服务项目<i class="el-icon-caret-bottom"></i></button>
+            <button class="button-list" @click.stop="buttonClick">服务项目<i class="el-icon-caret-bottom"></i></button>
             <ul class="list-nav" v-if="listSelect">
               <li v-for="item of list1" :key="item">{{item}}</li>
             </ul>
@@ -52,7 +52,7 @@
         </el-col>
         <el-col :span="2">
             <div class="grid-content">
-                <button class="button-list" @click="menberClick">会员中心<i class="el-icon-caret-bottom"></i></button>
+                <button class="button-list" @click.stop="menberClick">会员中心<i class="el-icon-caret-bottom"></i></button>
                 <ul class="menber-nav" v-if="member">
                     <li v-for="item of list2" :key="item">{{item}}</li>
                 </ul>
@@ -100,6 +100,10 @@ export default class HelloWorld extends Vue {
   menberClick () {
       this.member = !this.member
   }
+  headerClick () {
+      this.listSelect = false
+      this.member = false
+  }
 }
 </script>
 
@@ -123,6 +127,7 @@ export default class HelloWorld extends Vue {
     padding: 0;
   }
   .button-list {
+    outline: none;
     font-size: 15px;
     height: 30px;
     margin: 0;
