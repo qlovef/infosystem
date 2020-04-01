@@ -12,8 +12,9 @@
                     </el-button>
                     <el-button
                         type="primary"
-                        size="small">
-                        修改
+                        size="small"
+                        @click="onEditApproved">
+                        编辑
                     </el-button>
                     <el-button
                         type="primary"
@@ -26,23 +27,25 @@
                 <el-table
                     border
                     :data="approvedRecordList"
+                    @selection-change="onApprovedSelectChange"
                     style="width: 100%">
+                    <el-table-column type="selection"></el-table-column>
                     <el-table-column
                         prop="Name"
                         label="姓名"
-                        width="180"
+                        width="100"
                         align="center">
                     </el-table-column>
                     <el-table-column
                         prop="JobNumber"
                         label="工号"
-                        width="180"
+                        width="100"
                         align="center">
                     </el-table-column>
                     <el-table-column
                         prop="Type"
                         label="类型"
-                        width="180"
+                        width="100"
                         align="center">
                         <template slot-scope="scope">
                             {{vacationType[scope.row.Type]}}
@@ -68,7 +71,7 @@
                     <el-table-column
                         prop="IsPermit"
                         label="是否审批"
-                        width="180"
+                        width="100"
                         align="center">
                         <template slot-scope="scope">
                         <span
@@ -83,7 +86,7 @@
                     <el-table-column
                         prop=""
                         label=""
-                        width="180"
+                        width="100"
                         align="center">
                         <div>意见</div>
                     </el-table-column>
@@ -102,7 +105,7 @@
 
         <el-dialog
             width="40%"
-            title="新增"
+            :title="notApproved.Id ? '编辑':'新增'"
             :show-close="false"
             :close-on-click-modal="false"
             :visible.sync="addLeave">
@@ -110,7 +113,7 @@
                 label-width="100px"
                 :model="notApproved">
                 <el-form-item label="姓名">
-                    <el-input v-model.trim="notApproved.Name" size="mini" autocomplete="off"></el-input>
+                    <el-input class="text" v-model.trim="notApproved.Name" size="mini" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="工号">
                     <el-input v-model.trim.number="notApproved.JobNumber" size="mini" autocomplete="off"></el-input>
@@ -152,7 +155,7 @@
                     </el-button>
                     <el-button
                         size="small"
-                        @click="addLeave = false">
+                        @click="closePopup">
                         取 消
                     </el-button>
                 </div>
@@ -166,7 +169,8 @@ import { Pagination } from '@/interface/public'
 import { ApprovedRecord } from '@/interface/approvedRecordList'
 import {
     RequestGetNotApprovedRecordList,
-    RequestPostAddNotApproved
+    RequestPostAddNotApproved,
+    RequestPostEditNotApproved
 } from '@/request/approvedRecordList'
 
 @Component({})
@@ -182,6 +186,8 @@ export default class NotApprovedList extends Vue {
 
     // 新增列表时间
     dateValue = ''
+    // 选中菜单
+    selection: ApprovedRecord[] = []
     // 搜索信息
     searchInfo = ''
 
@@ -204,24 +210,107 @@ export default class NotApprovedList extends Vue {
         '调休假'
     ]
 
+    notApprovedInitial!: ApprovedRecord
     // 是否显示对话窗口
     addLeave = false
 
     created () {
+        this.notApprovedInitial = this.deepCopy(this.notApproved)
         this.fetchNotApprovedRecordList()
+    }
+    // 点击编辑时
+    onEditApproved () {
+        this.addLeave = true
+        this.setMenuForm()
+    }
+    // onApprovedRowClick (row: ApprovedRecord) {
+    //     const notApprovedTable = this.$refs.notApprovedTable as ElTable
+    //     const hasSelected = this.selection.some(sel => {
+    //         return sel.Id === row.Id
+    //     })
+    //     if (hasSelected) {
+    //         notApprovedTable.toggleRowSelection(row, false)
+    //     } else {
+    //         notApprovedTable.clearSelection()
+    //         notApprovedTable.toggleRowSelection(row, true)
+    //     }
+    // }
+    // 菜单表格选中改变时触发
+    onApprovedSelectChange (selection: ApprovedRecord[]) {
+        this.selection = selection
     }
     // 改变页码的时候触发
     onPageChange (page: number) {
         this.pagination.Page = page
         this.fetchNotApprovedRecordList()
     }
-
-    // 新增确定时触发
+    // 初始化弹窗时间
+    innitializationtime () {
+        this.dateValue = ''
+    }
+    // 点击确定时触发
     notApprovedSubmit () {
         this.notApproved.StartTime = this.dateValue[0]
         this.notApproved.EndTime = this.dateValue[1]
         this.addLeave = false
         this.subNotApprovedform()
+        this.notApproved = {
+            Id: null,
+            Name: '',
+            JobNumber: null,
+            Type: null,
+            StartTime: '',
+            EndTime: '',
+            IsPermit: 0
+        }
+        this.innitializationtime()
+    }
+    // 点击取消时触发
+    closePopup () {
+        this.addLeave = false
+        this.notApproved = {
+            Id: null,
+            Name: '',
+            JobNumber: null,
+            Type: null,
+            StartTime: '',
+            EndTime: '',
+            IsPermit: 0
+        }
+        this.innitializationtime()
+    }
+    // TODO 深克隆
+    deepCopy (ele: any) {
+        if (typeof ele === 'object') {
+            if (ele === null) {
+                return ele
+            }
+            if (ele.length !== undefined) {
+                const arr: any = []
+                ele.forEach((item: any) => {
+                    arr.push(this.deepCopy(item))
+                })
+                return arr
+            } else {
+                const obj: any = {}
+                Object.keys(ele).forEach(key => {
+                    obj[key] = this.deepCopy(ele[key])
+                })
+                return obj
+            }
+        } else {
+            return ele
+        }
+    }
+    /** @desc 设置菜单弹窗表单 @param {Menu} menu 菜单 */
+    setMenuForm (notApproved?: ApprovedRecord) {
+        if (!notApproved) {
+            // TODO 深克隆
+            this.notApproved = this.deepCopy(this.notApprovedInitial)
+        } else {
+            // TODO 深克隆
+            this.notApproved = this.deepCopy(notApproved)
+        }
     }
 
     async fetchNotApprovedRecordList () {
@@ -237,9 +326,16 @@ export default class NotApprovedList extends Vue {
 
     async subNotApprovedform () {
         const { notApproved } = this
-        const result: any = await RequestPostAddNotApproved(notApproved)
-        if (result.Code === 1) {
-            this.fetchNotApprovedRecordList()
+        if (notApproved.Id) {
+            const result: any = await RequestPostEditNotApproved(notApproved)
+            if (result.Code === 1) {
+                this.fetchNotApprovedRecordList()
+            }
+        } else {
+            const result: any = await RequestPostAddNotApproved(notApproved)
+            if (result.Code === 1) {
+                this.fetchNotApprovedRecordList()
+            }
         }
     }
 }
@@ -248,5 +344,8 @@ export default class NotApprovedList extends Vue {
 <style lang="scss" scoped>
 .date-select {
     width: 350px;
+}
+.text {
+    width: 80%;
 }
 </style>

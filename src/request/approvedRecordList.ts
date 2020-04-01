@@ -22,3 +22,7 @@ export const RequestGetNotApprovedRecordList = (params: GetParams) => {
 export const RequestPostAddNotApproved = (notApproved: ApprovedRecord) => {
     return Post('/vacation/application/add', notApproved)
 }
+// 编辑菜单
+export const RequestPostEditNotApproved = (notApproved: ApprovedRecord) => {
+    return Post('/vacation/application/edit', notApproved)
+}
